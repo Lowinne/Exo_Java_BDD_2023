@@ -67,6 +67,31 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 <h2>Exercice 7 : La valeur le plus proche de 0 (2° version)</h2>
 <p>Trouvez la valeur la plus proche de 0 (chiffres positifs ou négatifs)</p>
 <p>En cas d'égalité entre un chiffre positif et négatif, affichez le chiffre positif</p>
+<%
+    int[] tableauDeChiffres = {5, -3, 8, -1, 4, 2, -7, 0}; // Remplacez cela par votre tableau réel
+
+    int chiffreProcheDeZero = 0;
+
+    if (tableauDeChiffres.length > 0) {
+        // Trier le tableau pour faciliter la recherche du chiffre le plus proche de zéro
+        Arrays.sort(tableauDeChiffres);
+
+        // Initialiser avec la première valeur
+        chiffreProcheDeZero = tableauDeChiffres[0];
+
+        for (int i = 1; i < tableauDeChiffres.length; i++) {
+            int valeurActuelle = tableauDeChiffres[i];
+
+            // Si la valeur absolue actuelle est plus petite que celle du chiffre actuel le plus proche de zéro
+            // ou si les deux valeurs ont la même valeur absolue mais la valeur actuelle est positive
+            if (Math.abs(valeurActuelle) < Math.abs(chiffreProcheDeZero) || 
+                (Math.abs(valeurActuelle) == Math.abs(chiffreProcheDeZero) && valeurActuelle > 0)) {
+                chiffreProcheDeZero = valeurActuelle;
+            }
+        }
+    }
+%>
+<%=chiffreProcheDeZero %>
 
 <% } %>
 <p><a href="index.html">Retour au sommaire</a></p>
