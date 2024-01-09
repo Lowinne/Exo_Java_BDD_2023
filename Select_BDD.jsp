@@ -60,107 +60,166 @@ while (rs1.next()) {
 
 
 
-<h2>Exercice 2 : Année de recherche</h2>
-<p>Créer un champ de saisie permettant à l'utilisateur de choisir l'année de sa recherche.</p>
-
-<form action="" method="post">
-    <label for="searchYear">Année de recherche:</label>
-    <input type="text" id="searchYear" name="searchYear">
-    <input type="submit" value="Rechercher">
-</form>
-
 <%
-    String searchYearParam = request.getParameter("searchYear");
+// Function to establish a database connection
+public Connection connectToDatabase() throws ClassNotFoundException, SQLException {
+    String url = "jdbc:mariadb://localhost:3306/films";
+    String user = "mysql";
+    String password = "mysql";
+    
+    Class.forName("org.mariadb.jdbc.Driver");
+    return DriverManager.getConnection(url, user, password);
+}
 
-    if (searchYearParam != null && !searchYearParam.isEmpty()) {
-        int searchYear = Integer.parseInt(searchYearParam);
+// Function to close database resources
+public void closeResources(Connection conn, PreparedStatement pstmt, ResultSet rs) throws SQLException {
+    if (rs != null) rs.close();
+    if (pstmt != null) pstmt.close();
+    if (conn != null) conn.close();
+}
 
-        String sqlSearch = "SELECT idFilm, titre, année FROM Film WHERE année = ?";
-        PreparedStatement pstmtSearch = conn.prepareStatement(sqlSearch);
-        pstmtSearch.setInt(1, searchYear);
+// Exercise 1: Display films between 2000 and 2015
+public void displayFilmsBetween2000And2015() throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
-        ResultSet rsSearch = pstmtSearch.executeQuery();
+    try {
+        conn = connectToDatabase();
+        String sql = "SELECT idFilm, titre, année FROM Film WHERE année > 2000 AND année < 2015";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
 
-        while (rsSearch.next()) {
-            String col1 = rsSearch.getString("idFilm");
-            String col2 = rsSearch.getString("titre");
-            String col3 = rsSearch.getString("année");
-
-            out.println("id : " + col1 + ", titre : " + col2 + ", année : " + col3 + "</br>");
+        while (rs.next()) {
+            out.println("id: " + rs.getString("idFilm") + ", titre: " + rs.getString("titre") +
+                    ", année: " + rs.getString("année") + "</br>");
         }
-
-        rsSearch.close();
-        pstmtSearch.close();
+    } finally {
+        closeResources(conn, pstmt, rs);
     }
+}
+
+// Exercise 2: Display films based on user-selected year
+public void displayFilmsByYear(int selectedYear) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        conn = connectToDatabase();
+        String sql = "SELECT idFilm, titre, année FROM Film WHERE année = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, selectedYear);
+        rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            out.println("id: " + rs.getString("idFilm") + ", titre: " + rs.getString("titre") +
+                    ", année: " + rs.getString("année") + "</br>");
+        }
+    } finally {
+        closeResources(conn, pstmt, rs);
+    }
+}
+
+// Exercise 3: Modify film title by ID
+public void modifyFilmTitleById(int filmId, String newTitle) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+
+    try {
+        conn = connectToDatabase();
+        String sql = "UPDATE Film SET titre = ? WHERE idFilm = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, newTitle);
+        pstmt.setInt(2, filmId);
+        pstmt.executeUpdate();
+        out.println("Film title updated successfully.");
+    } finally {
+        closeResources(conn, pstmt, null); // No ResultSet for update operation
+    }
+}
+
+// Exercise 4: Insert a new film into the database
+public void insertNewFilm(String title, int year) throws SQLException, ClassNotFoundException {
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+
+    try {
+        conn = connectToDatabase();
+        String sql = "INSERT INTO Film (titre, année) VALUES (?, ?)";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, title);
+        pstmt.setInt(2, year);
+        pstmt.executeUpdate();
+        out.println("New film inserted successfully.");
+    } finally {
+        closeResources(conn, pstmt, null); // No ResultSet for insert operation
+    }
+}
+
 %>
 
-<h2>Exercice 3 : Modification du titre du film</h2>
-<p>Créer un fichier permettant de modifier le titre d'un film sur la base de son ID (ID choisi par l'utilisateur)</p>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion à MariaDB via JSP</title>
+</head>
+<body>
+    <h1>Exemple de connexion à MariaDB avec JSP</h1>
 
-<form action="" method="post">
-    <label for="filmId">ID du film:</label>
-    <input type="text" id="filmId" name="filmId">
-    <label for="newTitle">Nouveau titre:</label>
-    <input type="text" id="newTitle" name="newTitle">
-    <input type="submit" value="Modifier Titre">
-</form>
+    <% displayFilmsBetween2000And2015(); %>
 
-<%
-    String filmIdParam = request.getParameter("filmId");
-    String newTitleParam = request.getParameter("newTitle");
-
-    if (filmIdParam != null && newTitleParam != null && !filmIdParam.isEmpty() && !newTitleParam.isEmpty()) {
-        int filmId = Integer.parseInt(filmIdParam);
-
-        String sqlUpdate = "UPDATE Film SET titre = ? WHERE idFilm = ?";
-        PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate);
-        pstmtUpdate.setString(1, newTitleParam);
-        pstmtUpdate.setInt(2, filmId);
-
-        int rowsUpdated = pstmtUpdate.executeUpdate();
-
-        if (rowsUpdated > 0) {
-            out.println("Le titre du film a été modifié avec succès.");
-        } else {
-            out.println("Erreur lors de la modification du titre du film.");
+    <h2>Exercice 2 : Année de recherche</h2>
+    <p>Extraire les films pour une année spécifique :</p>
+    <form method="post">
+        <label for="year">Année de recherche :</label>
+        <input type="text" name="year" id="year">
+        <input type="submit" value="Rechercher">
+    </form>
+    <% 
+        String selectedYearParam = request.getParameter("year");
+        if (selectedYearParam != null && !selectedYearParam.isEmpty()) {
+            int selectedYear = Integer.parseInt(selectedYearParam);
+            displayFilmsByYear(selectedYear);
         }
+    %>
 
-        pstmtUpdate.close();
-    }
-%>
-
-<h2>Exercice 4 : La valeur maximum</h2>
-<p>Créer un formulaire pour saisir un nouveau film dans la base de données</p>
-
-<form action="" method="post">
-    <label for="newFilmTitle">Titre du nouveau film:</label>
-    <input type="text" id="newFilmTitle" name="newFilmTitle">
-    <label for="newFilmYear">Année du nouveau film:</label>
-    <input type="text" id="newFilmYear" name="newFilmYear">
-    <input type="submit" value="Ajouter Nouveau Film">
-</form>
-
-<%
-    String newFilmTitleParam = request.getParameter("newFilmTitle");
-    String newFilmYearParam = request.getParameter("newFilmYear");
-
-    if (newFilmTitleParam != null && newFilmYearParam != null && !newFilmTitleParam.isEmpty() && !newFilmYearParam.isEmpty()) {
-        String sqlInsert = "INSERT INTO Film (titre, année) VALUES (?, ?)";
-        PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert);
-        pstmtInsert.setString(1, newFilmTitleParam);
-        pstmtInsert.setInt(2, Integer.parseInt(newFilmYearParam));
-
-        int rowsInserted = pstmtInsert.executeUpdate();
-
-        if (rowsInserted > 0) {
-            out.println("Le nouveau film a été ajouté avec succès.");
-        } else {
-            out.println("Erreur lors de l'ajout du nouveau film.");
+    <h2>Exercice 3 : Modification du titre du film</h2>
+    <p>Modifier le titre d'un film :</p>
+    <form method="post">
+        <label for="filmId">ID du film :</label>
+        <input type="text" name="filmId" id="filmId">
+        <label for="newTitle">Nouveau titre :</label>
+        <input type="text" name="newTitle" id="newTitle">
+        <input type="submit" value="Modifier">
+    </form>
+    <% 
+        String filmIdParam = request.getParameter("filmId");
+        String newTitleParam = request.getParameter("newTitle");
+        if (filmIdParam != null && newTitleParam != null && !filmIdParam.isEmpty() && !newTitleParam.isEmpty()) {
+            int filmId = Integer.parseInt(filmIdParam);
+            modifyFilmTitleById(filmId, newTitleParam);
         }
+    %>
 
-        pstmtInsert.close();
-    }
-%>
+    <h2>Exercice 4 : La valeur maximum</h2>
+    <p>Créer un formulaire pour saisir un nouveau film dans la base de données :</p>
+    <form method="post">
+        <label for="newFilmTitle">Titre du film :</label>
+        <input type="text" name="newFilmTitle" id="newFilmTitle">
+        <label for="newFilmYear">Année du film :</label>
+        <input type="text" name="newFilmYear" id="newFilmYear">
+        <input type="submit" value="Ajouter">
+    </form>
+    <% 
+        String newFilmTitleParam = request.getParameter("newFilmTitle");
+        String newFilmYearParam = request.getParameter("newFilmYear");
+        if (newFilmTitleParam != null && newFilmYearParam != null &&
+            !newFilmTitleParam.isEmpty() && !newFilmYearParam.isEmpty()) {
+            int newFilmYear = Integer.parseInt(newFilmYearParam);
+            insertNewFilm(newFilmTitleParam, newFilmYear);
+        }
+    %>
 
 </body>
 </html>
