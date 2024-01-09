@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="java.util.Arrays"%>
 <html>
 <head>
 <title>Les tableaux</title>
@@ -68,8 +68,6 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 <p>Trouvez la valeur la plus proche de 0 (chiffres positifs ou négatifs)</p>
 <p>En cas d'égalité entre un chiffre positif et négatif, affichez le chiffre positif</p>
 <%
-    int[] tableauDeChiffres = {5, -3, 8, -1, 4, 2, -7, 0}; // Remplacez cela par votre tableau réel
-
     int chiffreProcheDeZero = 0;
 
     if (tableauDeChiffres.length > 0) {
