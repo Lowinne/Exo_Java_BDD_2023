@@ -54,6 +54,12 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 
 <h2>Exercice 5 : La valeur minimale</h2>
 <p>Ecrire un programme pour afficher la valeur minimale saisie par l'utilisateur</p>
+<%int moins = c1; %>
+<% for (int z = 1; z < cpt; z++) { %>
+   <% if (moins > Integer.parseInt(tableauDeChiffres[z])) { %>
+        <% moins = Integer.parseInt(tableauDeChiffres[z]); } %>
+<% } %>
+<%= moins %>
 
 <h2>Exercice 6 : La valeur le plus proche de 0</h2>
 <p>Trouvez la valeur la plus proche de 0 (chiffres positifs ou négatifs)</p>
