@@ -41,9 +41,9 @@
 <%
 
 while (rs1.next()) {
-            String colonne11 = rs.getString("idFilm");
-            String colonne21 = rs.getString("titre");
-            String colonne31 = rs.getString("année");
+            String colonne11 = rs1.getString("idFilm");
+            String colonne21 = rs1.getString("titre");
+            String colonne31 = rs1.getString("année");
             // Faites ce que vous voulez avec les données...
             //Exemple d'affichage de 2 colonnes
             out.println("id : " + colonne11 + ", titre : " + colonne21 + ", année : " + colonne31 + "</br>");
