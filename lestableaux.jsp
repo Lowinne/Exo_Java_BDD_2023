@@ -39,7 +39,7 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 <%int tot = 0; %>
 <%int cpt = tableauDeChiffres.length; %>
 <% for (int i = 0; i <= cpt; i++) { %>
-   <% tot += Integer.parseInt(tableauDeChiffres[i]) %>
+   <% tot += Integer.parseInt(tableauDeChiffres[i]); %>
 <% } %>
 <%= tot %>
 
@@ -48,7 +48,7 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 <%int plus = 0; %>
 <% for (int y = 0; y <= cpt; y++) { %>
    <% if (plus < Integer.parseInt(tableauDeChiffres[i])) { %>
-        <% plus = Integer.parseInt(tableauDeChiffres[i]) } %>
+        <% plus = Integer.parseInt(tableauDeChiffres[i]); } %>
 <% } %>
 <%= plus %>
 
