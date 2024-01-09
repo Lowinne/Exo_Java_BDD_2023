@@ -47,8 +47,8 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
 <p>Ecrire un programme pour afficher la valeur maximale saisie par l'utilisateur</p>
 <%int plus = 0; %>
 <% for (int y = 0; y <= cpt; y++) { %>
-   <% if (plus < Integer.parseInt(tableauDeChiffres[i])) { %>
-        <% plus = Integer.parseInt(tableauDeChiffres[i]); } %>
+   <% if (plus < Integer.parseInt(tableauDeChiffres[y])) { %>
+        <% plus = Integer.parseInt(tableauDeChiffres[y]); } %>
 <% } %>
 <%= plus %>
 
