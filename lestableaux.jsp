@@ -75,10 +75,10 @@ Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'ut
         Arrays.sort(tableauDeChiffres);
 
         // Initialiser avec la première valeur
-        chiffreProcheDeZero = tableauDeChiffres[0];
+        chiffreProcheDeZero = Integer.parseInt(tableauDeChiffres[0]);
 
         for (int i = 1; i < tableauDeChiffres.length; i++) {
-            int valeurActuelle = tableauDeChiffres[i];
+            int valeurActuelle = Integer.parseInt(tableauDeChiffres[i]);
 
             // Si la valeur absolue actuelle est plus petite que celle du chiffre actuel le plus proche de zéro
             // ou si les deux valeurs ont la même valeur absolue mais la valeur actuelle est positive
