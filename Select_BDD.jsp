@@ -52,11 +52,10 @@ while (rs1.next()) {
         // Fermer les ressources 
         rs.close();
         pstmt.close();
+        rs1.close();
+        pstmt1.close();
         conn.close();
 
-rs1.close();
-        pstmt1.close();
-        conn1.close();
     %>
 
 
