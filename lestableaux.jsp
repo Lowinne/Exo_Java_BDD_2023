@@ -29,13 +29,28 @@
 
 <h2>Exercice 2 : La somme des 2 premières valeurs</h2>
 <p>Ecrire un programme afin d'afficher la somme des deux premières valeurs</p>
+<% int c2 = Integer.parseInt(tableauDeChiffres[1]); %>
+<% int som = c1 + c2; %>
+<%= som %>
 
 <h2>Exercice 3 : La somme de toutes les valeurs</h2>
 <p>L'utilisateur peut à présent saisir autant de valeurs qu'il le souhaite dans champs de saisie.</br>
 Ecrire un programme afin de faire la somme de toutes les valeurs saisie par l'utilisateur</p>
+<%int tot = 0; %>
+<%int cpt = tableauDeChiffres.length; %>
+<% for (int i = 0; i <= cpt; i++) { %>
+   <% tot += Integer.parseInt(tableauDeChiffres[i]) %>
+<% } %>
+<%= tot %>
 
 <h2>Exercice 4 : La valeur maximum</h2>
 <p>Ecrire un programme pour afficher la valeur maximale saisie par l'utilisateur</p>
+<%int plus = 0; %>
+<% for (int y = 0; y <= cpt; y++) { %>
+   <% if (plus < Integer.parseInt(tableauDeChiffres[i])) { %>
+        <% plus = Integer.parseInt(tableauDeChiffres[i]) %>
+<% } %>
+<%= plus %>
 
 <h2>Exercice 5 : La valeur minimale</h2>
 <p>Ecrire un programme pour afficher la valeur minimale saisie par l'utilisateur</p>
